@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+
 import Entry from './components/Entry';
+import EntryForm from './components/EntryForm';
 
 export default function App() {
   const [entries, setEntries] = useState([]);
@@ -17,20 +19,29 @@ export default function App() {
 
   return (
     <>
-      <h1>Lean Coffee Board</h1>
+      <HeaderStyled>Lean Coffee Board</HeaderStyled>
       <Grid role="list">
         {entries.map(({ text, author }, index) => (
           <li key={index}>
             <Entry text={text} author={author} />
           </li>
         ))}
+        <EntryForm
+          labelText="Add lean coffee note"
+          placeholder="ADD LEAN COFFEE NOTE"
+        />
       </Grid>
     </>
   );
 }
 
+const HeaderStyled = styled.h1`
+  text-align: center;
+`;
+
 const Grid = styled.ul`
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   list-style: none;
   padding: 0;

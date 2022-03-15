@@ -8,6 +8,6 @@ POST {{baseUrl}}/entries
 Content-Type: application/json
 
 {
-  "text": "Another text",
-  "author": "John"
+  "text": "I walk around like everything’s fine, but deep down, inside my shoe, my sock is sliding off.",
+  "author": "Anonymous"
 }
