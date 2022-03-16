@@ -26,10 +26,7 @@ export default function App() {
             <Entry text={text} author={author} />
           </li>
         ))}
-        <EntryForm
-          labelText="Add lean coffee note"
-          placeholder="ADD LEAN COFFEE NOTE"
-        />
+        <EntryForm />
       </Grid>
     </>
   );

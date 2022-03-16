@@ -1,44 +1,35 @@
-import { useState } from 'react';
 import styled from 'styled-components';
+import ScreenReaderOnly from './ScreenReaderOnly';
 
-export default function EntryForm({ labelText, placeholder }) {
-  const [entryText, setEntryText] = useState('');
-
+export default function EntryForm({ onSubmit }) {
   return (
-    <Form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="input" hidden>
-          {labelText}
-        </label>
-        <Underline />
-      </div>
+    <Form onSubmit={handleSubmit} aria-labelledby="entry-form-name">
+      <label htmlFor="text">
+        <ScreenReaderOnly>Add lean coffee note</ScreenReaderOnly>
+      </label>
       <input
-        name="entry-input"
-        id="input"
+        name="text"
+        id="text"
         type="text"
-        placeholder={placeholder}
-        value={entryText}
-        onChange={event => setEntryText(event.target.value)}
+        placeholder="ADD LEAN COFFEE NOTE"
         autoComplete="off"
         required
       />
-      <button>+</button>
+      <button id="entry-form-name">
+        <ScreenReaderOnly>Create new entry</ScreenReaderOnly>
+        <span aria-hidden="true">+</span>
+      </button>
     </Form>
   );
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log('worked');
-    setEntryText('');
+    const form = event.target;
+    const inputElement = form.elements.text;
+    onSubmit(inputElement.value);
+    console.log(inputElement.value);
   }
 }
-const Underline = styled.span`
-  align-self: center;
-  height: 1px;
-  transition: 0.25s linear;
-  width: 0;
-  margin-top: 1px;
-`;
 
 const Form = styled.form`
   width: 100vw;
@@ -68,7 +59,7 @@ const Form = styled.form`
     width: 32px;
     height: 32px;
     margin: 10px;
-    padding-bottom: 4px;
+    padding-bottom: 5px;
     line-height: 0;
     font-size: 30px;
     vertical-align: middle;
