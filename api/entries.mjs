@@ -2,7 +2,6 @@ import dbConnect from '../lib/dbConnect.mjs';
 import Entry from '../models/Entry.mjs';
 
 await dbConnect();
-console.log('Connected to DB');
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {

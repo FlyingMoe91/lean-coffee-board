@@ -1,35 +1,54 @@
-import { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import useSWR from 'swr';
 
 import Entry from './components/Entry';
 import EntryForm from './components/EntryForm';
 
+const fetcher = (...args) => fetch(...args).then(res => res.json());
+
 export default function App() {
-  const [entries, setEntries] = useState([]);
+  const {
+    data: entries,
+    error: entriesError,
+    mutate: mutateEntries,
+  } = useSWR('/api/entries', fetcher, { refreshInterval: 1000 });
 
-  useEffect(() => {
-    getEntries();
-
-    async function getEntries() {
-      const response = await fetch('/api/entries');
-      const entries = await response.json();
-      setEntries(entries);
-    }
-  }, []);
+  if (entriesError) return <h1>Sorry, could not fetch</h1>;
 
   return (
     <>
       <HeaderStyled>Lean Coffee Board</HeaderStyled>
       <Grid role="list">
-        {entries.map(({ text, author }, index) => (
-          <li key={index}>
-            <Entry text={text} author={author} />
-          </li>
-        ))}
-        <EntryForm />
+        {entries
+          ? entries.map(({ text, author, _id, tempId }) => (
+              <li key={_id ?? tempId}>
+                <Entry text={text} author={author} />
+              </li>
+            ))
+          : '...loading...'}
       </Grid>
+      <EntryForm onSubmit={handleNewEntry} />
     </>
   );
+
+  async function handleNewEntry(text) {
+    const newEntry = {
+      text,
+      author: 'Anonymous',
+      tempId: Math.random(),
+    };
+
+    mutateEntries([...entries, newEntry], false);
+
+    await fetch('/api/entries', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newEntry),
+    });
+    mutateEntries();
+  }
 }
 
 const HeaderStyled = styled.h1`
@@ -42,4 +61,5 @@ const Grid = styled.ul`
   gap: 20px;
   list-style: none;
   padding: 0;
+  margin-bottom: 70px;
 `;

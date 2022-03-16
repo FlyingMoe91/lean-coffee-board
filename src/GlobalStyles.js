@@ -6,6 +6,9 @@ export default createGlobalStyle`
   }
 
   body {
+    display: grid;
+    grid-template-rows: 48px auto 48px;
+    height: 100vh;
     margin: 12px;
     font-family: sans-serif;
     font-size: 112.5%;
