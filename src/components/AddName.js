@@ -12,7 +12,7 @@ export default function AddName({ onSubmit }) {
         required
       />
       <label htmlFor="color">Pick a color</label>
-      <input id="color" name="color" type="color" />
+      <input id="color" name="color" type="color" defaultValue="#0bc45f" />
       <button>Rember me</button>
     </Form>
   );
@@ -20,8 +20,9 @@ export default function AddName({ onSubmit }) {
   function handleSubmit(event) {
     event.preventDefault();
     const form = event.target;
-    const inputElement = form.elements.name;
-    onSubmit(inputElement.value);
+    const inputElementName = form.elements.name;
+    const inputElementColor = form.elements.color;
+    onSubmit(inputElementName.value, inputElementColor.value);
     form.reset();
   }
 }

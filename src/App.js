@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
+import dayjs from 'dayjs';
 
 import AddName from './components/AddName';
 import Entry from './components/Entry';
@@ -10,7 +11,9 @@ const fetcher = (...args) => fetch(...args).then(res => res.json());
 
 export default function App() {
   const [active, setActive] = useState(false);
-  const [user, setUser] = useState('');
+  const [userName, setUserName] = useState('');
+  const [userColor, setUserColor] = useState('');
+
   const {
     data: entries,
     error: entriesError,
@@ -26,9 +29,15 @@ export default function App() {
       {active && (
         <Grid role="list">
           {entries
-            ? entries.map(({ text, author, _id, tempId }) => (
+            ? entries.map(({ text, author, _id, color, date, tempId }) => (
                 <li key={_id ?? tempId}>
-                  <Entry text={text} author={author} />
+                  <Entry
+                    text={text}
+                    author={author}
+                    color={color}
+                    date={date}
+                    userName={userName}
+                  />
                 </li>
               ))
             : '...loading...'}
@@ -38,15 +47,18 @@ export default function App() {
     </>
   );
 
-  function handleNewUser(name) {
-    setUser(name);
+  function handleNewUser(name, color) {
+    setUserName(name);
+    setUserColor(color);
     setActive(!active);
   }
 
   async function handleNewEntry(text) {
     const newEntry = {
       text,
-      author: user,
+      author: userName,
+      color: userColor,
+      date: dayjs().format(' D.MM.YY H:mm'),
       tempId: Math.random(),
     };
 
