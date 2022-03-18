@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
 
+import AddName from './components/AddName';
 import Entry from './components/Entry';
 import EntryForm from './components/EntryForm';
 
 const fetcher = (...args) => fetch(...args).then(res => res.json());
 
 export default function App() {
+  const [active, setActive] = useState(false);
+  const [user, setUser] = useState('');
   const {
     data: entries,
     error: entriesError,
@@ -17,24 +21,32 @@ export default function App() {
 
   return (
     <>
-      <HeaderStyled>Lean Coffee Board</HeaderStyled>
-      <Grid role="list">
-        {entries
-          ? entries.map(({ text, author, _id, tempId }) => (
-              <li key={_id ?? tempId}>
-                <Entry text={text} author={author} />
-              </li>
-            ))
-          : '...loading...'}
-      </Grid>
-      <EntryForm onSubmit={handleNewEntry} />
+      {!active && <AddName onSubmit={handleNewUser} />}
+      {active && <HeaderStyled>Lean Coffee Board</HeaderStyled>}
+      {active && (
+        <Grid role="list">
+          {entries
+            ? entries.map(({ text, author, _id, tempId }) => (
+                <li key={_id ?? tempId}>
+                  <Entry text={text} author={author} />
+                </li>
+              ))
+            : '...loading...'}
+        </Grid>
+      )}
+      {active && <EntryForm onSubmit={handleNewEntry} />}
     </>
   );
+
+  function handleNewUser(name) {
+    setUser(name);
+    setActive(!active);
+  }
 
   async function handleNewEntry(text) {
     const newEntry = {
       text,
-      author: 'Anonymous',
+      author: user,
       tempId: Math.random(),
     };
 
