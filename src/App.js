@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import useSWR from 'swr';
-import dayjs from 'dayjs';
 
 import AddName from './components/AddName';
 import Entry from './components/Entry';
@@ -29,14 +28,15 @@ export default function App() {
       {active && (
         <Grid role="list">
           {entries
-            ? entries.map(({ text, author, _id, color, date, tempId }) => (
+            ? entries.map(({ text, author, _id, color, createdAt, tempId }) => (
                 <li key={_id ?? tempId}>
                   <Entry
                     text={text}
                     author={author}
                     color={color}
-                    date={date}
+                    createdAt={createdAt}
                     userName={userName}
+                    onDelete={() => handleDeleteEntry(_id)}
                   />
                 </li>
               ))
@@ -53,12 +53,24 @@ export default function App() {
     setActive(!active);
   }
 
+  async function handleDeleteEntry(_id) {
+    const filteredEntries = entries.filter(entry => entry._id !== _id);
+    mutateEntries(filteredEntries, false);
+    await fetch(`/api/entries`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ _id }),
+    });
+    mutateEntries();
+  }
+
   async function handleNewEntry(text) {
     const newEntry = {
       text,
       author: userName,
       color: userColor,
-      date: dayjs().format(' D.MM.YY H:mm'),
       tempId: Math.random(),
     };
 
