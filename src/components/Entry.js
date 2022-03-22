@@ -2,7 +2,14 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 import ScreenReaderOnly from './ScreenReaderOnly';
 
-export default function Entry({ text, author, color, createdAt, onDelete }) {
+export default function Entry({
+  text,
+  author,
+  color,
+  createdAt,
+  onDelete,
+  onClick,
+}) {
   return (
     <Card color={color}>
       <Date>{dayjs(createdAt).format('D.MM.YY H:mm')}</Date>
@@ -12,7 +19,7 @@ export default function Entry({ text, author, color, createdAt, onDelete }) {
       <label htmlFor="marking">
         <ScreenReaderOnly>mark as read</ScreenReaderOnly>
       </label>
-      <Checkbox id="marking" type="checkbox"></Checkbox>
+      <Checkbox onClick={onClick} id="marking" type="checkbox"></Checkbox>
     </Card>
   );
 }

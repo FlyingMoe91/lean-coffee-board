@@ -37,6 +37,7 @@ export default function App() {
                     createdAt={createdAt}
                     userName={userName}
                     onDelete={() => handleDeleteEntry(_id)}
+                    onClick={handleMarked}
                   />
                 </li>
               ))
@@ -84,6 +85,10 @@ export default function App() {
       body: JSON.stringify(newEntry),
     });
     mutateEntries();
+  }
+
+  function handleMarked() {
+    return;
   }
 }
 
