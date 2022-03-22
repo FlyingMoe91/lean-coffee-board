@@ -9,6 +9,7 @@ export default function AddName({ onSubmit }) {
         id="name"
         type="text"
         placeholder="Enter name"
+        autoComplete="off"
         required
       />
       <label htmlFor="color">Pick a color</label>

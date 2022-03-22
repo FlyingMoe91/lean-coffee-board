@@ -94,6 +94,7 @@ const HeaderStyled = styled.h1`
 const Grid = styled.ul`
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
   list-style: none;
   padding: 0;

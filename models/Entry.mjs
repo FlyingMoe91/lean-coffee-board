@@ -2,9 +2,18 @@ import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema(
   {
-    text: mongoose.SchemaTypes.String,
-    author: mongoose.SchemaTypes.String,
-    color: mongoose.SchemaTypes.String,
+    text: {
+      type: mongoose.SchemaTypes.String,
+      required: true,
+      minlength: 3,
+    },
+    author: {
+      type: mongoose.SchemaTypes.String,
+    },
+    color: {
+      type: mongoose.SchemaTypes.String,
+      default: '#0bc45f',
+    },
   },
   {
     versionKey: false,
